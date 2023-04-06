@@ -1,0 +1,8 @@
+.Common_Progress_Component_Wrapper{
+    position: relative;
+    z-index: 999;
+}
+.Common_Progress_Box{
+    width: 100%;
+  z-index: 999;
+}

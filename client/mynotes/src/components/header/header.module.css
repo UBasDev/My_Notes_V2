@@ -1,0 +1,11 @@
+.Header_Cancel_Icon_Style{
+    position: absolute;
+    right: 2%;
+    bottom: 30%;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: .3s ease-out all;
+}
+.Header_Cancel_Icon_Style:hover{
+    transform: scale(1.1);
+}
