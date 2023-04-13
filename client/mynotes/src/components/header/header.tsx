@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Button_With_Loading from "../buttons/button_with_loading";
@@ -33,7 +33,7 @@ interface Header_Nav_Items_Type{
     pathname:string;
     pathname_as:string;
 }
-const navItems:ReadonlyArray<Header_Nav_Items_Type> = [
+const unauthenticated_nav_items:ReadonlyArray<Header_Nav_Items_Type> = [
     {
         id:1,
         key:"Home",
@@ -47,16 +47,9 @@ const navItems:ReadonlyArray<Header_Nav_Items_Type> = [
         value:"About",
         pathname:"/",
         pathname_as:"/",
-    },
+    },    
     {
         id:3,
-        key:"Crypto",
-        value:"Crypto",
-        pathname:"/crypto/get_all_cryptos",
-        pathname_as:"/crypto/get_all_cryptos",
-    },
-    {
-        id:4,
         key:"Register",
         value:"Register",
         pathname:"/",
@@ -64,17 +57,46 @@ const navItems:ReadonlyArray<Header_Nav_Items_Type> = [
     }
 ];
 
+const authenticated_nav_items: ReadonlyArray<Header_Nav_Items_Type> = [
+  {
+    id:1,
+    key:"Home",
+    value:"Home",
+    pathname:"/",
+    pathname_as:"/",
+  },{
+    id:2,
+    key:"About",
+    value:"About",
+    pathname:"/",
+    pathname_as:"/",
+  },
+  {
+    id:3,
+    key:"Crypto",
+    value:"Crypto",
+    pathname:"/crypto/get_all_cryptos",
+    pathname_as:"/crypto/get_all_cryptos",
+  },
+]
+
 const string1 = "UCB"
 const string2 = "UCB"
 const string3 = "Sign Out"
 const string4 = "Sign In"
 
 const Header: NextPage & any = (props:any): JSX.Element => {
+  const [is_user_authenticated, set_is_user_authenticated] = useState<boolean>(false)  
+
   const session: any = useSession();
+  useEffect(()=>{
+    set_is_user_authenticated(session.status == "authenticated" ? true : false);
+  },[session])
   const [mobileOpen, setMobileOpen] = useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+  const navItems:ReadonlyArray<Header_Nav_Items_Type> = is_user_authenticated ? authenticated_nav_items : unauthenticated_nav_items
   const drawer = (
     <Box sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -86,11 +108,14 @@ const Header: NextPage & any = (props:any): JSX.Element => {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item.id} disablePadding>
+          <Link onClick={handleDrawerToggle} key={item.id} as={item.pathname_as} href={{
+            pathname: item.pathname,
+            href: item.pathname
+          }}><ListItem key={item.id} disablePadding>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText primary={item.key} />
             </ListItemButton>
-          </ListItem>
+          </ListItem></Link>
         ))}
       </List>
     </Box>
@@ -169,7 +194,7 @@ const Header: NextPage & any = (props:any): JSX.Element => {
           {drawer}
         </Drawer>
       </Box>
-      <Box component="main" sx={{ p: 3 }}>
+      <Box component="main" sx={{ p: { xs: 1, sm:1.5, lg: 3 }, width:'100%' }}>
         <Toolbar />
         {props.children}
       </Box>

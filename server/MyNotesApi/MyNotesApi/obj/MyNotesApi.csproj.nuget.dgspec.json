@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ugurcan.bas\\Desktop\\Documents\\personal_demos\\.NET_projects\\MyNotesApi\\MyNotesApi\\MyNotesApi.csproj": {}
+    "C:\\Users\\ugurcan.bas\\Desktop\\Documents\\personal_demos\\NextJS\\nextjs7_note\\server\\MyNotesApi\\MyNotesApi\\MyNotesApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ugurcan.bas\\Desktop\\Documents\\personal_demos\\.NET_projects\\MyNotesApi\\MyNotesApi\\MyNotesApi.csproj": {
+    "C:\\Users\\ugurcan.bas\\Desktop\\Documents\\personal_demos\\NextJS\\nextjs7_note\\server\\MyNotesApi\\MyNotesApi\\MyNotesApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ugurcan.bas\\Desktop\\Documents\\personal_demos\\.NET_projects\\MyNotesApi\\MyNotesApi\\MyNotesApi.csproj",
+        "projectUniqueName": "C:\\Users\\ugurcan.bas\\Desktop\\Documents\\personal_demos\\NextJS\\nextjs7_note\\server\\MyNotesApi\\MyNotesApi\\MyNotesApi.csproj",
         "projectName": "MyNotesApi",
-        "projectPath": "C:\\Users\\ugurcan.bas\\Desktop\\Documents\\personal_demos\\.NET_projects\\MyNotesApi\\MyNotesApi\\MyNotesApi.csproj",
+        "projectPath": "C:\\Users\\ugurcan.bas\\Desktop\\Documents\\personal_demos\\NextJS\\nextjs7_note\\server\\MyNotesApi\\MyNotesApi\\MyNotesApi.csproj",
         "packagesPath": "C:\\Users\\ugurcan.bas\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ugurcan.bas\\Desktop\\Documents\\personal_demos\\.NET_projects\\MyNotesApi\\MyNotesApi\\obj\\",
+        "outputPath": "C:\\Users\\ugurcan.bas\\Desktop\\Documents\\personal_demos\\NextJS\\nextjs7_note\\server\\MyNotesApi\\MyNotesApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

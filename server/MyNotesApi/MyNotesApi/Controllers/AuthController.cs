@@ -24,17 +24,17 @@ namespace MyNotesApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        //private readonly IRedisCacheService _redisCacheService;
+        private readonly IRedisCacheService _redisCacheService;
         private readonly IAuthService _authService;
         private readonly PostgreSqlDbContext _postgreSqlDbContext;        
         private readonly JwtSettings _jwtSettings;
-        public AuthController(PostgreSqlDbContext postgreSqlDbContext, IOptions<JwtSettings> jwtSettings, IAuthService authService //IRedisCacheService redisCacheService
+        public AuthController(PostgreSqlDbContext postgreSqlDbContext, IOptions<JwtSettings> jwtSettings, IAuthService authService, IRedisCacheService redisCacheService
             )
         {
             _postgreSqlDbContext= postgreSqlDbContext;
             _jwtSettings= jwtSettings.Value;
             _authService= authService;
-            //_redisCacheService= redisCacheService;
+            _redisCacheService= redisCacheService;
         }
 
         [HttpPost("register")]

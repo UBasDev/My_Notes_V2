@@ -7,20 +7,14 @@ export default function CommonLayout({ children }:any) {
         <Header>
         <main>{children}</main>
         </Header>
-        <br/>        
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <Link href={"/"}>Go Homepage</Link>
+        {/* <Link href={"/"}>Go Homepage</Link>
         <Link as={"/crypto/get_all_cryptos"} href={{        
         pathname:'/crypto/get_all_cryptos',
         href: '/crypto/get_all_cryptos',
         query: {
           'key1':'value1'
         },        
-      }} >Go to Currencies</Link>        
+      }} >Go to Currencies</Link>         */}
         <footer>&copy; CommonLayout Footer</footer>
       </>
     );

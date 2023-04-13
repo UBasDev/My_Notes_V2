@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PxGRi/2xaq43Pad9Qa2Kquknri7o6MIDDrR8At7eGagRo6yH596PeFx8gjVjd3jcS1u5XwtGMd4b6ORuO6Gcaw==",
+  "dgSpecHash": "cMsLVGPZLjD//GUGV1fbpGpRdZdbgqfs8Z9VQfV5nesvI+tQbXxK5eLz7rTkyGsAKgdHRxxA3VOkt/S/W4vevg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ugurcan.bas\\Desktop\\Documents\\personal_demos\\.NET_projects\\MyNotesApi\\MyNotesApi\\MyNotesApi.csproj",
+  "projectFilePath": "C:\\Users\\ugurcan.bas\\Desktop\\Documents\\personal_demos\\NextJS\\nextjs7_note\\server\\MyNotesApi\\MyNotesApi\\MyNotesApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ugurcan.bas\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\ugurcan.bas\\.nuget\\packages\\identitymodel\\6.0.0\\identitymodel.6.0.0.nupkg.sha512",

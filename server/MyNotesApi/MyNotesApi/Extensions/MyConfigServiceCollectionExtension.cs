@@ -32,7 +32,8 @@ namespace MyNotesApi.Extensions
         {
             
             services.AddDbContext<PostgreSqlDbContext>();
-            //services.AddSingleton<IRedisCacheService, RedisCacheService>();
+            services.AddSingleton<IRedisCacheService, RedisCacheService>();
+            services.AddScoped<IAuthService, AuthService>();
             return services;
         }
         public static void AddMyMiddlewares(this IApplicationBuilder app)

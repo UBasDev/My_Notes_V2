@@ -5,8 +5,8 @@ using MyNotesApi.Extensions;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
-//var multiplexer = ConnectionMultiplexer.Connect(builder.Configuration.GetSection("RedisDbSettings:Host").Value);
-//builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+var multiplexer = ConnectionMultiplexer.Connect(builder.Configuration.GetSection("RedisDbSettings:Host").Value);
+builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
 // Add services to the container.
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddControllers();

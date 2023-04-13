@@ -1,0 +1,44 @@
+.Get_All_Cryptos_Error_Message{
+    font-weight: 600;
+    text-align:center;
+    background-color:red;
+    border-radius:10px;
+    margin-bottom:2rem;
+    animation: scaleAnimationFromTopLeftCorner1 1s ease-out 0s infinite alternate;
+    transform-origin: center;    
+}
+
+.Get_All_Cryptos_Table_Main_Headers{
+  color:white;
+  background-color:black
+}
+
+.Get_All_Cryptos_Table_Sub_Headers{
+  color:white;
+  background-color:black
+}
+
+.Get_All_Cryptos_Table_Rows:hover{
+  background-color: rgba(200, 200, 200, .1);
+  cursor: pointer;
+}
+
+.Get_All_Cryptos_Table_Border_Radius_Style1{
+  border-top-left-radius:5px;
+  border-bottom-left-radius: 5px
+}
+.Get_All_Cryptos_Table_Border_Radius_Style2{
+  border-top-right-radius:5px;
+  border-bottom-right-radius: 5px
+}
+
+@keyframes scaleAnimationFromTopLeftCorner1 {
+    0% {
+      transform: scaleY(1);
+      transform: scaleX(1);
+    }
+    100% {
+      transform: scaleY(1.1);
+      transform: scaleX(1.02);
+    }
+  }
