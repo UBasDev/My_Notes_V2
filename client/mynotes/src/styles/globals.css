@@ -105,3 +105,32 @@ a {
     color-scheme: dark;
   }
 }
+
+/* .invisible-scrollbar::-webkit-scrollbar {
+  display: none;
+} */
+
+/* Demonstrate a "mostly customized" scrollbar
+ * (won't be visible otherwise if width/height is specified) */
+::-webkit-scrollbar {
+  display: block;
+  width: 3px;
+  height: 3px;
+  background-color: #000; /* or add it to the track */  
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-track {
+  /* box-shadow: inset 5px 5px 5px red;  */
+  background-color: #000;  
+  border-radius: 50px;
+}
+
+/* Add a thumb */
+::-webkit-scrollbar-thumb {
+  background: #9C27B0;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover{
+  background: #ce33e9;
+}

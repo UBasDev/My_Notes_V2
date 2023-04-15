@@ -28,15 +28,21 @@ const Custom_Progress : NextPage = ():JSX.Element & any=>{
     useEffect(()=>{
       router.events.on('routeChangeStart', handleRouteChangeStart)
       router.events.on('routeChangeComplete', handleRouteChangeComplete)
+      router.events.on('routeChangeError', handleRouteChangeError)
       return ()=>{
         router.events.off('routeChangeStart', handleRouteChangeStart)
         router.events.off('routeChangeComplete', handleRouteChangeComplete)
+        router.events.off('routeChangeError', handleRouteChangeError)
       }
     },[])
-    const handleRouteChangeStart = ()=>{
+    const handleRouteChangeStart = (url:string)=>{
       setIsProgressVisible(true)
     }
-    const handleRouteChangeComplete = ()=>{
+    const handleRouteChangeComplete = (url:string)=>{
+      setIsProgressVisible(false)
+    }
+    const handleRouteChangeError = (error:any)=>{
+      console.log('An error occurred while page transition', error)
       setIsProgressVisible(false)
     }
   if(isProgressVisible){

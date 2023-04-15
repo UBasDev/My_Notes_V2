@@ -1,5 +1,6 @@
 .Get_All_Cryptos_Error_Message{
     font-weight: 600;
+    padding: .5rem .8rem;
     text-align:center;
     background-color:red;
     border-radius:10px;
@@ -32,6 +33,18 @@
   border-bottom-right-radius: 5px
 }
 
+.Get_All_Cryptos_Table_Font_Weight_600 p{
+  font-weight: 600;
+}
+
+.Get_All_Cryptos_Table_Header_Font_Size{
+  font-size: small;
+}
+
+.Get_All_Cryptos_Table_Row_Font_Size p, .Get_All_Cryptos_Table_Row_Font_Size span{
+  font-size: smaller;
+}
+
 @keyframes scaleAnimationFromTopLeftCorner1 {
     0% {
       transform: scaleY(1);
@@ -42,3 +55,12 @@
       transform: scaleX(1.02);
     }
   }
+@media only screen and (max-width: 1200px) {
+    .Get_All_Cryptos_Table_Header_Font_Size{
+        font-size: smaller;
+    }
+    .Get_All_Cryptos_Table_Row_Font_Size p{
+      font-size: x-small;
+    }
+  }
+  
