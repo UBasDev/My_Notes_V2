@@ -9,3 +9,11 @@ export interface SignInFormItems {
     email: string;
     password: string;
 }
+
+export interface Get_all_cryptos_table_headers_props {
+    id: number;
+    key: string;
+    value: string;
+    width: string;
+    align: any;
+  }

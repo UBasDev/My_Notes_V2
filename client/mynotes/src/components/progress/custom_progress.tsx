@@ -4,23 +4,7 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 import { styled } from '@mui/material/styles';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-
-const BorderLinearProgress = styled(LinearProgress)(({ theme }:any) => ({
-    zIndex: 999,
-    position: "fixed",
-    left: 0,
-  right: 0,
-    bottom: 0,
-    height: 5,
-    borderRadius: 5,
-    [`&.${linearProgressClasses.colorPrimary}`]: {
-      backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
-    },
-    [`& .${linearProgressClasses.bar}`]: {
-      borderRadius: 5,
-      backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
-    },
-  }));
+import Border_Linear_Progress from "./border_linear_progress";
 
 const Custom_Progress : NextPage = ():JSX.Element & any=>{
   const [isProgressVisible, setIsProgressVisible] = useState<boolean>(false)  
@@ -48,7 +32,7 @@ const Custom_Progress : NextPage = ():JSX.Element & any=>{
   if(isProgressVisible){
     return <div>
         <Box>
-        <BorderLinearProgress/>
+        <Border_Linear_Progress/>
         </Box>
     </div>
   }

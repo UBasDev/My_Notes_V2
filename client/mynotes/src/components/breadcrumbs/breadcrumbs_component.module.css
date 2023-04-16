@@ -1,0 +1,18 @@
+.Breadcrumbs_Component_Style{
+    max-width: 1200px;
+    margin: 20px auto;
+}
+.Breadcrumbs_Component_Style > *{
+    display: inline-block;
+    margin-right: 10px;
+}
+.Breadcrumbs_Component_Style .crumb::after{
+    content: ">";
+    margin-left: 10px;
+}
+.Breadcrumbs_Component_Style .crumb:last-child::after{
+    display: none;
+}
+.Breadcrumbs_Component_Style .crumb a {
+    color: white;
+}

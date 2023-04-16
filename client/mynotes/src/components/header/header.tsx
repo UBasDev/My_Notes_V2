@@ -24,6 +24,7 @@ import Button_Without_Loading from "../buttons/button_without_loading";
 import CancelIcon from '@mui/icons-material/Cancel';
 import styles from "./header.module.css"
 import Link from "next/link";
+import Breadcrumbs_Component from "../breadcrumbs/breadcrumbs_component";
 
 const drawerWidth = 240;
 interface Header_Nav_Items_Type{
@@ -196,6 +197,7 @@ const Header: NextPage & any = (props:any): JSX.Element => {
       </Box>
       <Box component="main" sx={{ p: { xs: 1, sm:1.5, lg: 3 }, width:'100%' }}>
         <Toolbar />
+        {/* <Breadcrumbs_Component breadcrumb_name="test1" /> */}
         {props.children}
       </Box>
     </Box>
