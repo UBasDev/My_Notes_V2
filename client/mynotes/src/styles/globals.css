@@ -112,7 +112,8 @@ a {
 
 /* Demonstrate a "mostly customized" scrollbar
  * (won't be visible otherwise if width/height is specified) */
-::-webkit-scrollbar {
+
+:not(.react-tel-input *)::-webkit-scrollbar {
   display: block;
   width: 3px;
   height: 3px;
@@ -120,17 +121,17 @@ a {
   border-radius: 50px;
 }
 
-::-webkit-scrollbar-track {
+:not(.react-tel-input *)::-webkit-scrollbar-track  {
   /* box-shadow: inset 5px 5px 5px red;  */
   background-color: #000;  
   border-radius: 50px;
 }
 
 /* Add a thumb */
-::-webkit-scrollbar-thumb {
+:not(.react-tel-input *)::-webkit-scrollbar-thumb {
   background: #9C27B0;
   border-radius: 50px;
 }
-::-webkit-scrollbar-thumb:hover{
+:not(.react-tel-input *)::-webkit-scrollbar-thumb:hover{
   background: #ce33e9;
 }

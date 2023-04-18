@@ -112,7 +112,7 @@ const Get_All_Cryptos: NextPage = (): JSX.Element => {
       console.log("APIDEN ÇEKİLDİ");
       let all_crypto_data: Array<any> = [];
       let response_from_api_status: number = 0;
-      for (let i = 1; i < 11; i++) {
+      for (let i = 1; i < 7; i++) {
         const response_from_api = await axiosInstances.axiosCommonInstance
           .get(
             `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${i}`

@@ -26,9 +26,9 @@ const StyledBreadcrumb = styled(Chip)(({ theme }) => {
 const Get_Single_Crypto = (props: any) => {
     const router = useRouter()    
   return (
-    <>    
-    {/* router.query?.id ?? "" */}
+    <>        
       <p>Get Single Crypto works!</p>
+      <p>Currency: {router.query?.id ?? ""}</p>
     </>
   );
 };

@@ -11,6 +11,7 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using MyNotesApi.Services.Abstracts;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace MyNotesApi.Services.Concretes
 {
@@ -51,6 +52,27 @@ namespace MyNotesApi.Services.Concretes
             ressult.RefreshToken = newRefreshToken;
             return ressult;
         }
+
+        public async Task<string> Register(RegisterRequestDTO requestBody)
+        {
+            User? newUser = await _postgreSqlDbContext.Users.FirstOrDefaultAsync(user => user.Email == requestBody.Email);
+
+            if (newUser != null) throw new ExceptionInfo("This user already exists", 400);
+
+            EntityEntry<Entities.User> addedUser = await _postgreSqlDbContext.Users.AddAsync(new Entities.User()
+            {
+                Email = requestBody.Email,
+                Password = requestBody.Password,
+                Phone = requestBody.Phone,
+            });
+            if (addedUser == null)
+            {
+                throw new ExceptionInfo("Unable to create new user", 409);
+            }
+            await _postgreSqlDbContext.SaveChangesAsync();
+            return $"Welcome {addedUser.Entity.Email}";
+        }
+
         private string GetJwtToken(JwtSettings jwtSettings, TimeSpan expiration, IEnumerable<Claim> claims = null)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

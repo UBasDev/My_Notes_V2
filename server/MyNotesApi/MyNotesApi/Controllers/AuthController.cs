@@ -40,28 +40,8 @@ namespace MyNotesApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDTO requestBody)
         {
-            try
-            {
-                User? newUser = await _postgreSqlDbContext.Users.FirstOrDefaultAsync(user => user.Email == requestBody.Email);
-
-                if (newUser != null) throw new BadHttpRequestException("This user already exists");
-
-                EntityEntry<Entities.User> addedUser = await _postgreSqlDbContext.Users.AddAsync(new Entities.User()
-                {
-                    Email = requestBody.Email,
-                    Password = requestBody.Password
-                });
-                if (addedUser == null)
-                {
-                    throw new BadHttpRequestException("Unable to create new user");
-                }
-                await _postgreSqlDbContext.SaveChangesAsync();
-                return Ok($"Welcome {addedUser.Entity.Email}");
-            }catch(Exception ex)
-            {
-                Console.WriteLine(ex);
-                throw new BadHttpRequestException(ex.Message);
-            }
+            string response = await _authService.Register(requestBody);
+            return Ok(response);            
         }
 
         

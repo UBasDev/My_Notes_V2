@@ -25,6 +25,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import styles from "./header.module.css"
 import Link from "next/link";
 import Breadcrumbs_Component from "../breadcrumbs/breadcrumbs_component";
+import { useRouter } from "next/router";
 
 const drawerWidth = 240;
 interface Header_Nav_Items_Type{
@@ -85,8 +86,11 @@ const string1 = "UCB"
 const string2 = "UCB"
 const string3 = "Sign Out"
 const string4 = "Sign In"
+const string5 = "Sign Up"
 
 const Header: NextPage & any = (props:any): JSX.Element => {
+  const router = useRouter()
+
   const [is_user_authenticated, set_is_user_authenticated] = useState<boolean>(false)  
 
   const session: any = useSession();
@@ -168,9 +172,14 @@ const Header: NextPage & any = (props:any): JSX.Element => {
                 is_button_loading_active={true}
               />
             ) : (
+              <>
               <Button sx={{ color: "#fff" }} onClick={() => signIn()}>
                 {string4}
               </Button>
+              <Button sx={{ color: "#fff" }} onClick={() => router.push('/auth/sign_up')}>
+                {string5}
+              </Button>
+              </>
             )}
           </Box>
         </Toolbar>
@@ -196,8 +205,7 @@ const Header: NextPage & any = (props:any): JSX.Element => {
         </Drawer>
       </Box>
       <Box component="main" sx={{ p: { xs: 1, sm:1.5, lg: 3 }, width:'100%' }}>
-        <Toolbar />
-        {/* <Breadcrumbs_Component breadcrumb_name="test1" /> */}
+        <Toolbar />        
         {props.children}
       </Box>
     </Box>

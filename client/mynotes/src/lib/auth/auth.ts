@@ -28,7 +28,7 @@ const authOptions: NextAuthOptions = {
           const apiResponse: ApiLoginResponseType = await axiosInstances.axiosCommonInstance
             .post("/auth/login", bodyToSend)
             .then((response) => {     
-              console.log(response.data);         
+              console.log(response.data);
               return response.data;
             })
             .catch((error) => {

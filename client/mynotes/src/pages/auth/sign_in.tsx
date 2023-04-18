@@ -11,7 +11,6 @@ import { Grid } from "@mui/material";
 
 const SignInComponent: Component_page_with_layout_type = ():JSX.Element =>{
     return (
-        <div>
             <Grid container>
                 <Grid item xs={12}>
                     <h2 style={{textAlign:'center'}}>Login</h2>
@@ -19,9 +18,7 @@ const SignInComponent: Component_page_with_layout_type = ():JSX.Element =>{
                 <Grid item xs={12}>
                 <Sign_In_Form/>
                 </Grid>
-            </Grid>
-            
-        </div>
+            </Grid>            
     )
 }
 SignInComponent.getLayout = (page:any)=>{
