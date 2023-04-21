@@ -6,7 +6,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import styles from './get_all_cryptos_table_row.module.css'
 import { Get_all_cryptos_table_headers_props } from "@/interfaces";
-
+import { useEffect } from "react";
 
   const table_sub_headers: ReadonlyArray<Get_all_cryptos_table_headers_props> = [
     {
@@ -118,11 +118,34 @@ const Get_All_Cryptos_Table_Row = (props: {
         }
       };  
       
+      const element_scroll_animate = ():void=>{
+        //debugger
+        var reveals = document.querySelectorAll(".element_to_add_scroll_animation_into_view")
+        for (var i = 0; i < reveals.length; i++) {
+          var window_height = window.innerHeight;
+          var element_distance_to_top = reveals[i].getBoundingClientRect().top;
+          var element_distance_to_bottom = reveals[i].getBoundingClientRect().bottom;
+          var element_visible_after_px = 0;
+          if (element_distance_to_top < window_height - element_visible_after_px) {
+            reveals[i].classList.add("element_to_add_scroll_animation_into_view_active");
+          } else {
+            reveals[i].classList.remove("element_to_add_scroll_animation_into_view_active");
+          }
+        }
+      }
+      useEffect(()=>{
+        element_scroll_animate()
+        window.addEventListener("scroll", element_scroll_animate);                
+        return ()=>{
+          window.removeEventListener("scroll", element_scroll_animate);
+        }
+      },[])
+
       return (
-        <>    
+        <>          
           <TableRow
             onClick={on_table_row_click}
-            className={`${styles.Get_All_Cryptos_Table_Row_Rows} ${styles.Get_All_Cryptos_Table_Row_Font_Weight_600} ${styles.Get_All_Cryptos_Table_Row_Row_Font_Size}`}        
+            className={`element_to_add_scroll_animation_into_view ${styles.Get_All_Cryptos_Table_Row_Rows} ${styles.Get_All_Cryptos_Table_Row_Font_Weight_600} ${styles.Get_All_Cryptos_Table_Row_Row_Font_Size}`}        
             sx={{ "& > *": { borderBottom: "unset" }, backgroundColor: row_color }}
           >
             <TableCell>
@@ -165,7 +188,7 @@ const Get_All_Cryptos_Table_Row = (props: {
             <TableCell align="left"><p>{compact_formatter(row.total_volume)}</p></TableCell>
             <TableCell align="left"><p>{compact_formatter(row.market_cap)}</p></TableCell>
           </TableRow>
-          <TableRow>
+          <TableRow className="reveal">
             <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
               <Collapse
                 in={open && current_collapsed_item_id === row.id}

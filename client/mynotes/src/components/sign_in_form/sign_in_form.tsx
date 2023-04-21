@@ -26,6 +26,7 @@ import MUI_Global_Variants from "@/enums/MUI_global/MUI_global_variants";
 import Button_Types from "@/enums/button/button_types";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Sign_In_Validation_Scheme } from "@/lib/validations";
+import { hide_progress, show_progress } from "@/redux_stores/progress_state";
 //import {Sign_In_Validation_Scheme} from "@/lib/validations";
 
 const Sign_In_Form: NextPage = (): JSX.Element => {
@@ -55,6 +56,7 @@ const Sign_In_Form: NextPage = (): JSX.Element => {
     data: SignInFormItems,
     event: any
   ): Promise<void> => {
+    dispatch(show_progress())
     setIsButtonLoadingActive(true);
     const res = await signIn("credentials", {
       email: data.email,
@@ -73,6 +75,7 @@ const Sign_In_Form: NextPage = (): JSX.Element => {
       }
     }
     setIsButtonLoadingActive(false);
+    dispatch(hide_progress())
   };
 
   const Sign_In_Form_Inputs = [

@@ -1,12 +1,17 @@
 import axiosInstances from '@/lib/axios/axiosInstances'
 import { Grid } from '@mui/material'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
+import { RefObject, useEffect, useRef, useState } from 'react'
 import cryptodata from '../../crypto.json'
+import { useDispatch } from 'react-redux'
+import { show_snackbar } from '@/redux_stores/snackbar_state'
+import Snackbar_Severity_Enums from '@/enums/snackbar_severity_enums'
+import constants from '@/constants'
 
 // const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export default function Home() {  
+  const dispatch = useDispatch()
   const [location_info, set_location_info] = useState<any>()
   useEffect(()=>{
     retrieve_location_data()
@@ -17,12 +22,9 @@ export default function Home() {
       const location_info_from_session_storage = window.sessionStorage.getItem('location_info')
     if(!location_info_from_session_storage){
       console.log('APIDEN ÇEKTİM')      
-      const response = await axiosInstances.axiosCommonInstance.get('http://ip-api.com/json/').then((response)=>response.data)
-      debugger
-      set_location_info(response)
-      debugger
-      window.sessionStorage.setItem('location_info', JSON.stringify(response))
-      debugger
+      const response = await axiosInstances.axiosCommonInstance.get('http://ip-api.com/json/').then((response)=>response.data)      
+      set_location_info(response)      
+      window.sessionStorage.setItem('location_info', JSON.stringify(response))      
     }
     else{
       console.log('STORAGEDAN ÇEKTİM')
@@ -32,7 +34,21 @@ export default function Home() {
       console.log(error)
     }
   }
-  console.log(location_info)
+  console.log(location_info)  
+
+  useEffect(()=>{    
+    const login_message_from_local_storage = window.localStorage.getItem(constants.login_message_local_storage_key)
+    if(!!login_message_from_local_storage) {
+      dispatch(
+        show_snackbar({
+          snackbar_content: login_message_from_local_storage,
+          snackbar_type: Snackbar_Severity_Enums.Success,
+        })
+      ); 
+      window.localStorage.setItem(constants.login_message_local_storage_key, "")
+    }
+  },[])
+
   return (
     <>
       <Head>
@@ -45,8 +61,48 @@ export default function Home() {
         <button onClick={()=>console.log('Snackbar content', snackbar_content)}>SNACKBAR STATE</button>                 */}        
         <Grid container>
           <Grid item>
-          </Grid>
-        </Grid>
+          </Grid>          
+        </Grid>        
     </>
   )
+}
+
+interface Args extends IntersectionObserverInit {
+  freezeOnceVisible?: boolean
+}
+
+function useIntersectionObserver(
+  elementRef: RefObject<Element>,
+  {
+    threshold = 0,
+    root = null,
+    rootMargin = '0%',
+    freezeOnceVisible = false,
+  }: Args,
+): IntersectionObserverEntry | undefined {
+  const [entry, setEntry] = useState<IntersectionObserverEntry>()
+
+  const frozen = entry?.isIntersecting && freezeOnceVisible
+
+  const updateEntry = ([entry]: IntersectionObserverEntry[]): void => {
+    setEntry(entry)
+  }
+
+  useEffect(() => {
+    const node = elementRef?.current // DOM Ref
+    const hasIOSupport = !!window.IntersectionObserver
+
+    if (!hasIOSupport || frozen || !node) return
+
+    const observerParams = { threshold, root, rootMargin }
+    const observer = new IntersectionObserver(updateEntry, observerParams)
+
+    observer.observe(node)
+
+    return () => observer.disconnect()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [elementRef?.current, JSON.stringify(threshold), root, rootMargin, frozen])
+
+  return entry
 }

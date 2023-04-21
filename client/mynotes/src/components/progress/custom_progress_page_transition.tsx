@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Border_Linear_Progress from "./border_linear_progress";
 
-const Custom_Progress : NextPage = ():JSX.Element & any=>{
+const Custom_Progress_Page_Transition : NextPage = ():JSX.Element & any=>{
   const [isProgressVisible, setIsProgressVisible] = useState<boolean>(false)  
   const router = useRouter();
     useEffect(()=>{
@@ -28,7 +28,7 @@ const Custom_Progress : NextPage = ():JSX.Element & any=>{
     const handleRouteChangeError = (error:any)=>{
       console.log('An error occurred while page transition', error)
       setIsProgressVisible(false)
-    }
+    }    
   if(isProgressVisible){
     return <div>
         <Box>
@@ -37,4 +37,4 @@ const Custom_Progress : NextPage = ():JSX.Element & any=>{
     </div>
   }
 }
-export default Custom_Progress
+export default Custom_Progress_Page_Transition

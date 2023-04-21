@@ -49,13 +49,6 @@ const unauthenticated_nav_items:ReadonlyArray<Header_Nav_Items_Type> = [
         value:"About",
         pathname:"/",
         pathname_as:"/",
-    },    
-    {
-        id:3,
-        key:"Register",
-        value:"Register",
-        pathname:"/",
-        pathname_as:"/",
     }
 ];
 

@@ -86,7 +86,7 @@
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
   padding: 0 !important;
 }
 
@@ -134,4 +134,14 @@ a {
 }
 :not(.react-tel-input *)::-webkit-scrollbar-thumb:hover{
   background: #ce33e9;
+}
+.element_to_add_scroll_animation_into_view{
+  position: relative;
+  transform: translateX(-150px);
+  opacity: 0;
+  transition: .3s all ease-out;
+}
+.element_to_add_scroll_animation_into_view.element_to_add_scroll_animation_into_view_active{
+  transform: translateX(0);
+  opacity: 1;
 }
