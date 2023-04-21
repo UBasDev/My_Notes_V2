@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Sign_Up_Validation_Scheme } from "@/lib/validations";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -24,11 +24,25 @@ import MUI_Global_Colors from "@/enums/MUI_global/MUI_global_colors";
 
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import styles from "./sign_up_form.module.css"
-import {Register_Service} from "@/services/auth";
+import styles from "./sign_up_form.module.css";
+import { Register_Service } from "@/services/auth";
 import { Register_Request_Dto, Register_Response_Dto } from "@/interfaces/auth";
+import { signIn } from "next-auth/react";
+import { useDispatch, useSelector } from "react-redux";
+import { show_snackbar } from "@/redux_stores/snackbar_state";
+import Snackbar_Severity_Enums from "@/enums/snackbar_severity_enums";
+import { useRouter } from "next/router";
+import utils from "@/utils";
+import constants from "@/constants";
+import { hide_progress, show_progress } from "@/redux_stores/progress_state";
 
 const Sign_Up_Form: NextPage = (): JSX.Element => {
+  const router = useRouter()
+
+  const { is_snackbar_visible } = useSelector(
+    (state: any) => state.snackbar_state
+  );
+  const dispatch = useDispatch();
   const [isButtonLoadingActive, setIsButtonLoadingActive] =
     useState<boolean>(false);
 
@@ -50,11 +64,43 @@ const Sign_Up_Form: NextPage = (): JSX.Element => {
       phone: "",
     },
   });
-  const handleFormSubmit = async (data: Register_Request_Dto, event: any): Promise<void> => {
-    //event.preventDefault();
-    const response_from_api:Register_Response_Dto = await Register_Service(data)
-    if(response_from_api.status != 200) alert(response_from_api.message)
-    console.log('DATA',data);
+  const handleFormSubmit = async (
+    data: Register_Request_Dto,
+    event: any
+  ): Promise<void> => {
+    dispatch(show_progress())
+    const response_from_api: Register_Response_Dto = await Register_Service(
+      data
+    );
+    if (response_from_api.status != 200) dispatch(
+      show_snackbar({
+        snackbar_content: `${response_from_api?.message} ${response_from_api?.status}`,
+        snackbar_type: Snackbar_Severity_Enums.Error,
+      })
+    );
+    else {      
+      const res = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        phone: data.phone,
+        redirect:false
+      });
+      if (res?.ok){     
+        window.localStorage.setItem(constants.login_message_local_storage_key, response_from_api.message ?? "")
+        window.location.replace('/')
+      }
+      else {
+        if (!is_snackbar_visible) {
+          dispatch(
+            show_snackbar({
+              snackbar_content: res?.error,
+              snackbar_type: Snackbar_Severity_Enums.Error,
+            })
+          );
+        }
+      }
+    }
+    dispatch(hide_progress())
   };
   const Sign_In_Form_Inputs = [
     {
@@ -93,24 +139,10 @@ const Sign_Up_Form: NextPage = (): JSX.Element => {
         </IconButton>
       ),
     },
-    // {
-    //   id: 3,
-    //   key: "phone",
-    //   value: "phone",
-    //   element_id: "sign_up_phone_input",
-    //   placeholder: "Your phone",
-    //   default_value: "",
-    //   label_value: "Phone",
-    //   input_type: "text",
-    //   icon: (
-    //     <IconButton tabIndex={-1} aria-label="email section" edge="end">
-    //       <AccountCircleIcon />
-    //     </IconButton>
-    //   ),
-    // },
   ];
+
   return (
-    <>
+    <>    
       <form onSubmit={handleSubmit(handleFormSubmit as any)}>
         <Grid
           paddingY={2}
@@ -154,33 +186,33 @@ const Sign_Up_Form: NextPage = (): JSX.Element => {
             </Grid>
           ))}
           <Grid item xs={10} lg={6}>
-            <PhoneInput              
-              inputStyle={{width: "100%"}}
+            <PhoneInput
+              inputStyle={{ width: "100%" }}
               inputProps={{
-                name: 'phone',                
+                name: "phone",
               }}
               country={"tr"}
-              preferredCountries={["tr","us"]}
+              preferredCountries={["tr", "us"]}
               disableCountryCode={false}
               enableSearch={true}
-              autoFormat={true}    
+              autoFormat={true}
               copyNumbersOnly={true}
               jumpCursorToEnd={true}
-              masks={{tr: '(...) ...-..-..'}}          
+              masks={{ tr: "(...) ...-..-.." }}
               value=""
-              onChange={(value:string, data:any) => {                
-                setValue('phone', value.slice(data?.dialCode?.length))
-              }}              
+              onChange={(value: string, data: any) => {
+                setValue("phone", value.slice(data?.dialCode?.length));
+              }}
             />
             <p
-                style={{
-                  color: "red",
-                  fontWeight: "600",
-                  padding: "0.2rem 1rem",
-                }}
-              >
-                {formState.errors?.phone?.message ?? ""}
-              </p>
+              style={{
+                color: "red",
+                fontWeight: "600",
+                padding: "0.2rem 1rem",
+              }}
+            >
+              {formState.errors?.phone?.message ?? ""}
+            </p>
           </Grid>
           <Grid
             item
@@ -189,7 +221,7 @@ const Sign_Up_Form: NextPage = (): JSX.Element => {
             alignItems={"center"}
             justifyContent={"center"}
             textAlign={"center"}
-          >            
+          >
             <Button_With_Loading
               is_button_loading_active={isButtonLoadingActive}
               button_variant={MUI_Global_Variants.Contained}
@@ -200,8 +232,9 @@ const Sign_Up_Form: NextPage = (): JSX.Element => {
               circular_size={20}
               circular_color={MUI_Global_Colors.Inherit}
             />
-          </Grid>          
+          </Grid>
         </Grid>
+        <button onClick={()=>dispatch(show_progress())} type="button">progress</button>
       </form>
     </>
   );
