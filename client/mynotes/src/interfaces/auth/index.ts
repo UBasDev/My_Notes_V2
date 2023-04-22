@@ -7,3 +7,7 @@ export interface Register_Response_Dto{
     message:string;
     status:number;
 }
+export interface Authenticated_Routes{
+    path:string;
+    role:string;
+}

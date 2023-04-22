@@ -32,7 +32,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { show_snackbar } from "@/redux_stores/snackbar_state";
 import Snackbar_Severity_Enums from "@/enums/snackbar_severity_enums";
 import { useRouter } from "next/router";
-import utils from "@/utils";
 import constants from "@/constants";
 import { hide_progress, show_progress } from "@/redux_stores/progress_state";
 
@@ -175,11 +174,7 @@ const Sign_Up_Form: NextPage = (): JSX.Element => {
                 />
               </FormControl>
               <p
-                style={{
-                  color: "red",
-                  fontWeight: "600",
-                  padding: "0.2rem 1rem",
-                }}
+                className={styles.Sign_Up_Component_Validation_Error_Messages}
               >
                 {formState.errors?.[form_input.key]?.message ?? ""}
               </p>
@@ -204,12 +199,7 @@ const Sign_Up_Form: NextPage = (): JSX.Element => {
                 setValue("phone", value.slice(data?.dialCode?.length));
               }}
             />
-            <p
-              style={{
-                color: "red",
-                fontWeight: "600",
-                padding: "0.2rem 1rem",
-              }}
+            <p className={styles.Sign_Up_Component_Validation_Error_Messages}
             >
               {formState.errors?.phone?.message ?? ""}
             </p>
@@ -233,8 +223,7 @@ const Sign_Up_Form: NextPage = (): JSX.Element => {
               circular_color={MUI_Global_Colors.Inherit}
             />
           </Grid>
-        </Grid>
-        <button onClick={()=>dispatch(show_progress())} type="button">progress</button>
+        </Grid>        
       </form>
     </>
   );

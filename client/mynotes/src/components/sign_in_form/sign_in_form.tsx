@@ -27,7 +27,8 @@ import Button_Types from "@/enums/button/button_types";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Sign_In_Validation_Scheme } from "@/lib/validations";
 import { hide_progress, show_progress } from "@/redux_stores/progress_state";
-//import {Sign_In_Validation_Scheme} from "@/lib/validations";
+import constants from "@/constants";
+import styles from "./sign_in_form.module.css"
 
 const Sign_In_Form: NextPage = (): JSX.Element => {
   const [isButtonLoadingActive, setIsButtonLoadingActive] =
@@ -62,8 +63,11 @@ const Sign_In_Form: NextPage = (): JSX.Element => {
       email: data.email,
       password: data.password,
       redirect: false,
-    });
-    if (res?.ok) window.location.replace(window.location.origin);
+    });    
+    if (res?.ok) {      
+      window.localStorage.setItem(constants.login_message_local_storage_key, `Welcome ${data.email}`)
+      window.location.replace(window.location.origin)
+    }
     else {
       if (!is_snackbar_visible) {
         dispatch(
@@ -147,12 +151,7 @@ const Sign_In_Form: NextPage = (): JSX.Element => {
                 label={form_input.label_value}
               />
             </FormControl>
-            <p
-              style={{
-                color: "red",
-                fontWeight: "600",
-                padding: "0.2rem 1rem",
-              }}
+            <p className={styles.Sign_Up_Component_Validation_Error_Messages}
             >
               {formState.errors?.[form_input.key]?.message ?? ""}
             </p>

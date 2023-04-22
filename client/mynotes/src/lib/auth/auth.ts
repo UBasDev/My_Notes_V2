@@ -25,6 +25,7 @@ const authOptions: NextAuthOptions = {
             email,
             password,
           };                    
+          debugger
           const apiResponse: ApiLoginResponseType = await axiosInstances.axiosCommonInstance
             .post("/auth/login", bodyToSend)
             .then((response) => {     
