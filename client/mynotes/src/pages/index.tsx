@@ -1,54 +1,149 @@
-import axiosInstances from '@/lib/axios/axiosInstances'
-import { Grid } from '@mui/material'
-import Head from 'next/head'
-import { RefObject, useEffect, useRef, useState } from 'react'
-import cryptodata from '../../crypto.json'
-import { useDispatch } from 'react-redux'
-import { show_snackbar } from '@/redux_stores/snackbar_state'
-import Snackbar_Severity_Enums from '@/enums/snackbar_severity_enums'
-import constants from '@/constants'
+import axiosInstances from "@/lib/axios/axiosInstances";
+import { Grid } from "@mui/material";
+import Head from "next/head";
+import { RefObject, useContext, useEffect, useRef, useState } from "react";
+import cryptodata from "../../crypto.json";
+import { useDispatch } from "react-redux";
+import { show_snackbar } from "@/redux_stores/snackbar_state";
+import Snackbar_Severity_Enums from "@/enums/snackbar_severity_enums";
+import constants from "@/constants";
+import { Web_Socket_Context } from "@/contexts/web_socket_context";
 
 // const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {  
-  const dispatch = useDispatch()
-  const [location_info, set_location_info] = useState<any>()
-  useEffect(()=>{
-    retrieve_location_data()
-    console.log(cryptodata)
-  },[])
-  const retrieve_location_data = async ()=>{
-    try{
-      const location_info_from_session_storage = window.sessionStorage.getItem('location_info')
-    if(!location_info_from_session_storage){
-      console.log('APIDEN ÇEKTİM')      
-      const response = await axiosInstances.axiosCommonInstance.get('http://ip-api.com/json/').then((response)=>response.data)      
-      set_location_info(response)      
-      window.sessionStorage.setItem('location_info', JSON.stringify(response))      
-    }
-    else{
-      console.log('STORAGEDAN ÇEKTİM')
-      set_location_info(JSON.parse(location_info_from_session_storage))
-    }
-    }catch(error){
-      console.log(error)
-    }
-  }
-  console.log(location_info)  
+interface Socket_Message {
+  name: string;
+  text: string;
+}
 
-  useEffect(()=>{    
-    const login_message_from_local_storage = window.localStorage.getItem(constants.login_message_local_storage_key)
-    if(!!login_message_from_local_storage) {
+export default function Home() {
+  const dispatch = useDispatch();
+  const [location_info, set_location_info] = useState<any>();
+  useEffect(() => {
+    retrieve_location_data();
+    //console.log(cryptodata)
+  }, []);
+  const retrieve_location_data = async () => {
+    try {
+      const location_info_from_session_storage =
+        window.sessionStorage.getItem("location_info");
+      if (!location_info_from_session_storage) {
+        console.log("APIDEN ÇEKTİM");
+        const response = await axiosInstances.axiosCommonInstance
+          .get("http://ip-api.com/json/")
+          .then((response) => response.data);
+        set_location_info(response);
+        window.sessionStorage.setItem(
+          "location_info",
+          JSON.stringify(response)
+        );
+      } else {
+        console.log("STORAGEDAN ÇEKTİM");
+        set_location_info(JSON.parse(location_info_from_session_storage));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //console.log(location_info)
+
+  useEffect(() => {
+    const login_message_from_local_storage = window.localStorage.getItem(
+      constants.login_message_local_storage_key
+    );
+    if (!!login_message_from_local_storage) {
       dispatch(
         show_snackbar({
           snackbar_content: login_message_from_local_storage,
           snackbar_type: Snackbar_Severity_Enums.Success,
         })
-      ); 
-      window.localStorage.setItem(constants.login_message_local_storage_key, "")
+      );
+      window.localStorage.setItem(
+        constants.login_message_local_storage_key,
+        ""
+      );
     }
-  },[])
+  }, []);
 
+  /** SOCKET */
+  const socket = useContext(Web_Socket_Context);
+  const [socket_messages, set_socket_messages] = useState<
+    Array<Socket_Message>
+  >([]);
+  const [socket_message_input, set_socket_message_input] = useState<string>("");
+  const [socket_joined, set_socket_joined] = useState<boolean>(false);
+  const [socket_username, set_socket_username] = useState<string>("");
+  const [socket_is_user_typing, set_socket_is_user_typing] = useState<boolean>(false)
+  useEffect(() => {
+    //console.log('SOCKET USEEFFECT')
+    socket.on("connect", () => {
+      console.log("Socket connected");
+    });
+    socket.emit(
+      "get_all_messages_from_socket_server",
+      {},
+      (response: Array<Socket_Message>) => {
+        set_socket_messages((prev_value) => [...prev_value, ...response]);
+      }
+    );
+    socket.on("new_message_from_socket_server", (message: Socket_Message) => {
+      
+      set_socket_messages((prev_value) => [...prev_value, message]);
+    });
+    socket.on('user_typing_from_server', (response: any)=>{
+      if(response.is_typing) console.log(`${response.name} is typing...`);
+      else console.log('Not typing')
+    })
+    return () => {
+      socket.off("connect");
+      socket.off("new_message_from_socket_server");
+    };
+  }, []);
+
+  const handle_join_room = (event:any) => {
+    event.preventDefault();
+    if (!!socket_username)
+      socket.emit(
+        "join_room_from_client",
+        { username: socket_username },
+        (response: Array<string>) => {
+          console.log("All people joined to room", response);
+          set_socket_joined(true);
+        }
+      );
+  };
+
+  let user_typing_debounce;
+  const handle_user_typing = () => {
+    set_socket_is_user_typing(true)
+    socket.emit("user_typing_from_client", { is_typing: true });
+    
+    user_typing_debounce = setTimeout(() => {
+      set_socket_is_user_typing(false)
+      socket.emit("user_typing_from_client", { is_typing: false });
+    }, 2000);
+  };
+
+  const handle_message_input = (event: any) => {
+    set_socket_message_input(event.target.value);
+    handle_user_typing()
+  };
+  const handle_send_message = (event:any) => {
+    event.preventDefault();
+    const data_to_send: Socket_Message = {
+      text: socket_message_input,
+      name: socket_username,
+    };    
+    socket.emit(
+      "create_new_message_from_client",
+      {
+        ...data_to_send,
+      },
+      () => {
+        set_socket_message_input("");
+      }
+    );
+  };
   return (
     <>
       <Head>
@@ -56,53 +151,50 @@ export default function Home() {
         <meta name="description" content="Generated by create next app" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>              
-        {/* <button onClick={()=>dispatch(show_snackbar("content1"))}>CHANGE SNACKBAR STATE</button>
-        <button onClick={()=>console.log('Snackbar content', snackbar_content)}>SNACKBAR STATE</button>                 */}        
-        <Grid container>
-          <Grid item>
-          </Grid>          
-        </Grid>        
+      </Head>
+      <div>
+        {!socket_joined ? (
+          <form onSubmit={handle_join_room}>
+            Your name:{" "}
+            <input
+              onChange={(e) => set_socket_username(e.target.value)}
+              name="name_input"
+            />
+            <button type="submit">Send my info</button>
+          </form>
+        ) : (
+          <>
+            <div>
+              {socket_messages.length === 0 ? (
+                <p>No message</p>
+              ) : (
+                socket_messages.map((message, index) => (
+                  <div key={index}>
+                    <p>
+                      Sender:{message.name} - Message: {message.text}
+                    </p>
+                  </div>
+                ))
+              )}
+            </div>
+            {socket_is_user_typing ? (
+              <p>User is typing...</p>
+            ): (null)}
+            <form onSubmit={handle_send_message}>
+            Message: <input name="message_input"
+              onChange={handle_message_input}
+              value={socket_message_input}
+              type="text"
+            />
+            <br />
+            <button type="submit">Send message</button>
+            </form>
+          </>
+        )}
+      </div>
+      <Grid container>
+        <Grid item></Grid>
+      </Grid>
     </>
-  )
-}
-
-interface Args extends IntersectionObserverInit {
-  freezeOnceVisible?: boolean
-}
-
-function useIntersectionObserver(
-  elementRef: RefObject<Element>,
-  {
-    threshold = 0,
-    root = null,
-    rootMargin = '0%',
-    freezeOnceVisible = false,
-  }: Args,
-): IntersectionObserverEntry | undefined {
-  const [entry, setEntry] = useState<IntersectionObserverEntry>()
-
-  const frozen = entry?.isIntersecting && freezeOnceVisible
-
-  const updateEntry = ([entry]: IntersectionObserverEntry[]): void => {
-    setEntry(entry)
-  }
-
-  useEffect(() => {
-    const node = elementRef?.current // DOM Ref
-    const hasIOSupport = !!window.IntersectionObserver
-
-    if (!hasIOSupport || frozen || !node) return
-
-    const observerParams = { threshold, root, rootMargin }
-    const observer = new IntersectionObserver(updateEntry, observerParams)
-
-    observer.observe(node)
-
-    return () => observer.disconnect()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [elementRef?.current, JSON.stringify(threshold), root, rootMargin, frozen])
-
-  return entry
+  );
 }
