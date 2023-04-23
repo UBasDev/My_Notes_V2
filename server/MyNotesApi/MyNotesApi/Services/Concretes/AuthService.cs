@@ -44,8 +44,8 @@ namespace MyNotesApi.Services.Concretes
             //claims.Add(new Claim("Claim1", "Value1"));
             //claims.Add(new Claim("Claim2", "Value2"));
 
-            string newAccessToken = GetJwtToken(_jwtSettings, TimeSpan.FromMinutes(1), claims);
-            string newRefreshToken = GetJwtToken(_jwtSettings, TimeSpan.FromMinutes(2), claims);
+            string newAccessToken = GetJwtToken(_jwtSettings, TimeSpan.FromMinutes(30), claims);
+            string newRefreshToken = GetJwtToken(_jwtSettings, TimeSpan.FromMinutes(1440), claims);
 
             ressult.Message = $"Welcome {requestBody.Email}";
             ressult.AccessToken = newAccessToken;

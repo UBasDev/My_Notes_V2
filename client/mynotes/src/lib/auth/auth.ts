@@ -12,7 +12,7 @@ interface ApiLoginResponseType{
 const authOptions: NextAuthOptions = {
     session: {
       strategy: `jwt`,    
-      maxAge: 1 * 60, //1 dakika. Bu süre, Refresh Tokenla aynı sürede olmalı ve Sessionın `refetchInterval` süresinden daha UZUN olmalıdır
+      maxAge: 1440 * 60, //1 dakika. Bu süre, Refresh Tokenla aynı sürede olmalı ve Sessionın `refetchInterval` süresinden daha UZUN olmalıdır
         //maxAge: 1 * 24 * 60 * 60, // 1 günlük
     },
     providers: [

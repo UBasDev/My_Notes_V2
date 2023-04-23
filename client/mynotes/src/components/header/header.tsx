@@ -26,54 +26,10 @@ import styles from "./header.module.css"
 import Link from "next/link";
 import Breadcrumbs_Component from "../breadcrumbs/breadcrumbs_component";
 import { useRouter } from "next/router";
+import { Header_Nav_Items } from "@/interfaces/header";
+import constants from "@/constants";
 
 const drawerWidth = 240;
-interface Header_Nav_Items_Type{
-    id:number;
-    key:string;
-    value:string;
-    pathname:string;
-    pathname_as:string;
-}
-const unauthenticated_nav_items:ReadonlyArray<Header_Nav_Items_Type> = [
-    {
-        id:1,
-        key:"Home",
-        value:"Home",
-        pathname:"/",
-        pathname_as:"/",
-    },
-    {
-        id:2,
-        key:"About",
-        value:"About",
-        pathname:"/",
-        pathname_as:"/",
-    }
-];
-
-const authenticated_nav_items: ReadonlyArray<Header_Nav_Items_Type> = [
-  {
-    id:1,
-    key:"Home",
-    value:"Home",
-    pathname:"/",
-    pathname_as:"/",
-  },{
-    id:2,
-    key:"About",
-    value:"About",
-    pathname:"/",
-    pathname_as:"/",
-  },
-  {
-    id:3,
-    key:"Crypto",
-    value:"Crypto",
-    pathname:"/crypto/get_all_cryptos",
-    pathname_as:"/crypto/get_all_cryptos",
-  },
-]
 
 const string1 = "UCB"
 const string2 = "UCB"
@@ -94,7 +50,7 @@ const Header: NextPage & any = (props:any): JSX.Element => {
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
-  const navItems:ReadonlyArray<Header_Nav_Items_Type> = is_user_authenticated ? authenticated_nav_items : unauthenticated_nav_items
+  const navItems:ReadonlyArray<Header_Nav_Items> = is_user_authenticated ? constants.authenticated_nav_items : constants.unauthenticated_nav_items
   const drawer = (
     <Box sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
