@@ -159,7 +159,7 @@ export default function Home() {
             <input
               onChange={(e) => set_socket_username(e.target.value)}
               name="name_input"
-            />
+            />            
             <button type="submit">Send my info</button>
           </form>
         ) : (
